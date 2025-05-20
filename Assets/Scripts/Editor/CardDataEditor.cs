@@ -16,13 +16,27 @@ public class CardDataEditor : Editor
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_cost"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_description"));
 
-        if (cardType == CardData.CardType.Personagem)
+        if (cardType == CardData.CardType.Character)
         {
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Character attributes", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_life"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_attack"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("_defense"));
+        }
+
+        if (cardType == CardData.CardType.Terrain)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_effectTypeTerrain"));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_attributesTerrain"));
+        }
+
+        if (cardType == CardData.CardType.Equipment)
+        {
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_attributesEquipment"));
+        }
+
+        if (cardType == CardData.CardType.Effects)
+        {
+
         }
 
         serializedObject.ApplyModifiedProperties();
