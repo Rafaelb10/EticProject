@@ -4,8 +4,17 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     [SerializeField] private List<CardData> possibleCards;
-    private List<Card> hand = new List<Card>();
-    private const int handLimit = 5;
+    private List<Card> CharacterInHand = new List<Card>();
+    private List<Card> EffectInHand = new List<Card>();
+    private List<Card> TerrainInHand = new List<Card>();
+    private List<Card> EquipamentInHand = new List<Card>();
+
+    private const int CharacterInHandLimit = 5;
+    private const int EffectInHandLimit = 2;
+    private const int TerrainInHandLimit = 2;
+    private const int EquipamentInHandLimit = 3;
+
+
 
     public void GenerateRandomCard()
     {
@@ -20,14 +29,14 @@ public class CardManager : MonoBehaviour
         Card newCard = new Card(possibleCards[index]);
 
         // Se a mão estiver cheia, remover uma aleatória
-        if (hand.Count >= handLimit)
+        if (CharacterInHand.Count >= CharacterInHandLimit)
         {
-            int removeIndex = Random.Range(0, hand.Count);
+            int removeIndex = Random.Range(0, CharacterInHand.Count);
             Debug.Log($"Discarding card at index {removeIndex}");
-            hand.RemoveAt(removeIndex);
+            CharacterInHand.RemoveAt(removeIndex);
         }
 
-        hand.Add(newCard);
+        CharacterInHand.Add(newCard);
         Debug.Log($"Added card: {newCard.Data.name}");
     }
 

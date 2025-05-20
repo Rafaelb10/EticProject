@@ -13,7 +13,7 @@ public class CardUse : MonoBehaviour, IInterectable
 
     public void Interect()
     {
-        _card.Use();
+        //_card.Use();
     }
 
     void Update()
