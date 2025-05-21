@@ -19,4 +19,14 @@ public class CardView : MonoBehaviour, IInterectable
     {
         
     }
+
+    public void PossibleToInterect()
+    {
+
+    }
+
+    public void ResetColor()
+    {
+
+    }
 }

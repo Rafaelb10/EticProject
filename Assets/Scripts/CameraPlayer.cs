@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CameraPLayer : MonoBehaviour
 {
+    private IInterectable _lastInteracted;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -9,6 +10,23 @@ public class CameraPLayer : MonoBehaviour
 
     void Update()
     {
+
+
+        IInterectable hitObject = null;
+
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 20))
+        {
+            hitObject = hit.transform.GetComponent<IInterectable>();
+        }
+
+        if (hitObject != _lastInteracted)
+        {
+            _lastInteracted?.ResetColor();        // Reseta o último
+            hitObject?.PossibleToInterect();      // Aplica cor ao novo
+
+            _lastInteracted = hitObject;          // Atualiza referência
+        }
+
         PlayerInput();
     }
 
@@ -25,8 +43,6 @@ public class CameraPLayer : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 20))
         {
-            Debug.Log("We interect");
-
             IInterectable Iteractable = hit.transform.GetComponent<IInterectable>();
 
             if (Iteractable != null)
