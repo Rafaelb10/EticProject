@@ -15,8 +15,8 @@ public class Card
         switch (Data.CardType1)
         {
             case CardData.CardType.Character:
-                if (Data.GameObject != null)
-                    Object.Instantiate(Data.GameObject);
+                if (Data.GameObjectCard != null)
+                    Object.Instantiate(Data.GameObjectCard);
                 break;
 
             case CardData.CardType.Terrain:

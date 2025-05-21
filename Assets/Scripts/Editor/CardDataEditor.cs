@@ -13,6 +13,8 @@ public class CardDataEditor : Editor
 
         EditorGUILayout.PropertyField(cardTypeProp);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_sprite"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_gameObject"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_cost"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_description"));
 
@@ -36,7 +38,7 @@ public class CardDataEditor : Editor
 
         if (cardType == CardData.CardType.Effects)
         {
-
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("_effectClass"));
         }
 
         serializedObject.ApplyModifiedProperties();

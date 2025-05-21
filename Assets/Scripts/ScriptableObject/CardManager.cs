@@ -1,51 +1,170 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
     [SerializeField] private List<CardData> possibleCards;
-    private List<Card> CharacterInHand = new List<Card>();
-    private List<Card> EffectInHand = new List<Card>();
-    private List<Card> TerrainInHand = new List<Card>();
-    private List<Card> EquipamentInHand = new List<Card>();
+    private List<Card> _characterInHand = new List<Card>();
+    private List<Card> _effectInHand = new List<Card>();
+    private List<Card> _terrainInHand = new List<Card>();
+    private List<Card> _equipamentInHand = new List<Card>();
 
-    private const int CharacterInHandLimit = 5;
-    private const int EffectInHandLimit = 2;
-    private const int TerrainInHandLimit = 2;
-    private const int EquipamentInHandLimit = 3;
+    private const int _characterInHandLimit = 5;
+    private const int _effectInHandLimit = 2;
+    private const int _terrainInHandLimit = 2;
+    private const int _equipamentInHandLimit = 3;
 
+    [SerializeField] private List<Transform> _characterSlot = new List<Transform>();
+    [SerializeField] private List<Transform> _effectSlot = new List<Transform>();
+    [SerializeField] private List<Transform> _terraintSlot = new List<Transform>();
+    [SerializeField] private List<Transform> _equipamentSlot = new List<Transform>();
 
+    private int _buy;
 
-    public void GenerateRandomCard()
+    private void Start()
+    {
+        BuyCard(1);
+        GenerateCard();
+        PlaceCard();
+    }
+
+    public void BuyCard(int value)
+    {
+        _buy = value;
+    }
+
+    public void GenerateCard()
     {
         if (possibleCards.Count == 0)
         {
-            Debug.LogWarning("No cards available.");
             return;
         }
-
-        // Escolher uma aleatória
-        int index = Random.Range(0, possibleCards.Count);
-        Card newCard = new Card(possibleCards[index]);
-
-        // Se a mão estiver cheia, remover uma aleatória
-        if (CharacterInHand.Count >= CharacterInHandLimit)
+        else
         {
-            int removeIndex = Random.Range(0, CharacterInHand.Count);
-            Debug.Log($"Discarding card at index {removeIndex}");
-            CharacterInHand.RemoveAt(removeIndex);
+            if (_buy == 0)
+            {
+                List<CardData> effectsCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Effects);
+
+                if (effectsCards.Count == 0)
+                {
+                    return;
+                }
+
+                int index = Random.Range(0, effectsCards.Count);
+                Card newCard = new Card(effectsCards[index]);
+
+                if (_effectInHand.Count >= _effectInHandLimit)
+                {
+                    int removeIndex = Random.Range(0, _effectInHand.Count);
+                    _effectInHand.RemoveAt(removeIndex);
+                }
+
+                _effectInHand.Add(newCard);
+            }
+
+            if (_buy == 1)
+            {
+                List<CardData> characterCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Character);
+
+                if (characterCards.Count == 0)
+                {
+                    return;
+                }
+
+                int index = Random.Range(0, characterCards.Count);
+                Card newCard = new Card(characterCards[index]);
+
+                if (_characterInHand.Count >= _characterInHandLimit)
+                {
+                    int removeIndex = Random.Range(0, _characterInHand.Count);
+                    _characterInHand.RemoveAt(removeIndex);
+                }
+
+                _characterInHand.Add(newCard);
+            }
+
+            if (_buy == 2)
+            {
+                List<CardData> terrainCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Terrain);
+
+                if (terrainCards.Count == 0)
+                {
+                    return;
+                }
+
+                int index = Random.Range(0, terrainCards.Count);
+                Card newCard = new Card(terrainCards[index]);
+
+                if (_terrainInHand.Count >= _terrainInHandLimit)
+                {
+                    int removeIndex = Random.Range(0, _terrainInHand.Count);
+                    _terrainInHand.RemoveAt(removeIndex);
+                }
+
+                _terrainInHand.Add(newCard);
+            }
+
+            if (_buy == 3)
+            {
+                List<CardData> equipamentCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Equipment);
+
+                if (equipamentCards.Count == 0)
+                {
+                    return;
+                }
+
+                int index = Random.Range(0, equipamentCards.Count);
+                Card newCard = new Card(equipamentCards[index]);
+
+                if (_equipamentInHand.Count >= _equipamentInHandLimit)
+                {
+                    int removeIndex = Random.Range(0, _equipamentInHand.Count);
+                    _equipamentInHand.RemoveAt(removeIndex);
+                }
+
+                _equipamentInHand.Add(newCard);
+            }
         }
 
-        CharacterInHand.Add(newCard);
-        Debug.Log($"Added card: {newCard.Data.name}");
     }
 
-    public void UseCard(int index, PlayerStatus player)
+    public void PlaceCard()
     {
-        if (index < 0 || index >= hand.Count) return;
+        for (int i = 0; i < _effectInHand.Count && i < _effectSlot.Count; i++)
+        {
+            if (_effectSlot[i].childCount == 0)
+            {
+                GameObject CardView = Instantiate(_effectInHand[i].Data.GameObjectCard, _effectSlot[i]);
+                CardView.GetComponent<CardView>().Setup(_effectInHand[i]);
+            }
+        }
 
-        Card card = hand[index];
-        card.Use(player);
-        hand.RemoveAt(index);
+        for (int i = 0; i < _characterInHand.Count && i < _characterSlot.Count; i++)
+        {
+            if (_characterSlot[i].childCount == 0) 
+            {
+                GameObject CardView = Instantiate(_characterInHand[i].Data.GameObjectCard, _characterSlot[i]);
+                CardView.GetComponent<CardView>().Setup(_characterInHand[i]);
+            }
+        }
+
+        for (int i = 0; i < _terrainInHand.Count && i < _terraintSlot.Count; i++)
+        {
+            if (_terraintSlot[i].childCount == 0)
+            {
+                GameObject CardView = Instantiate(_terrainInHand[i].Data.GameObjectCard, _terraintSlot[i]);
+                CardView.GetComponent<CardView>().Setup(_terrainInHand[i]);
+            }
+        }
+
+        for (int i = 0; i < _equipamentInHand.Count && i < _equipamentSlot.Count; i++)
+        {
+            if (_equipamentSlot[i].childCount == 0)
+            {
+                GameObject CardView = Instantiate(_equipamentInHand[i].Data.GameObjectCard, _equipamentSlot[i]);
+                CardView.GetComponent<CardView>().Setup(_equipamentInHand[i]);
+            }
+        }
     }
 }

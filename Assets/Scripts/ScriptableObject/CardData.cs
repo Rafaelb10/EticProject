@@ -12,6 +12,12 @@ public class CardData : ScriptableObject
         Equipment
     }
 
+    public enum CardMaster
+    {
+        Player,
+        Bot
+    }
+
     public enum EffectType
     {
         Gain,
@@ -27,6 +33,7 @@ public class CardData : ScriptableObject
 
     [Header("Card Type")]
     [SerializeField] private CardType _cardType;
+    private CardMaster _cardMaster;
 
     [Header("Normal")]
     [SerializeField] private Sprite _sprite;
@@ -47,9 +54,12 @@ public class CardData : ScriptableObject
     [Header("Type of Equipament")]
     [SerializeField] private Attributes _attributesEquipment;
 
+    [Header("What effect")]
+    [SerializeField] private EffectClass _effectClass;
+
     public CardType CardType1 { get => _cardType; set => _cardType = value; }
-    public Sprite Sprite { get => _sprite; set => _sprite = value; }
-    public GameObject GameObject { get => _gameObject; set => _gameObject = value; }
+    public Sprite SpriteCard { get => _sprite; set => _sprite = value; }
+    public GameObject GameObjectCard { get => _gameObject; set => _gameObject = value; }
     public int Cost { get => _cost; set => _cost = value; }
     public string Name { get => _name; set => _name = value; }
     public string Description { get => _description; set => _description = value; }
@@ -59,4 +69,5 @@ public class CardData : ScriptableObject
     public EffectType EffectTypeTerrain { get => _effectTypeTerrain; set => _effectTypeTerrain = value; }
     public Attributes AttributesTerrain { get => _attributesTerrain; set => _attributesTerrain = value; }
     public Attributes AttributesEquipment { get => _attributesEquipment; set => _attributesEquipment = value; }
+    public CardMaster CardMaster1 { get => _cardMaster; set => _cardMaster = value; }
 }
