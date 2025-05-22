@@ -14,6 +14,7 @@ public class CardDataEditor : Editor
         EditorGUILayout.PropertyField(cardTypeProp);
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_sprite"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_gameObject"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("_gameObject2"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_name"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_cost"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("_description"));

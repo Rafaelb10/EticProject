@@ -38,6 +38,7 @@ public class CardData : ScriptableObject
     [Header("Normal")]
     [SerializeField] private Sprite _sprite;
     [SerializeField] private GameObject _gameObject;
+    [SerializeField] private GameObject _gameObject2;
     [SerializeField] private int _cost;
     [SerializeField] private string _name;
     [SerializeField] private string _description;
@@ -70,4 +71,5 @@ public class CardData : ScriptableObject
     public Attributes AttributesTerrain { get => _attributesTerrain; set => _attributesTerrain = value; }
     public Attributes AttributesEquipment { get => _attributesEquipment; set => _attributesEquipment = value; }
     public CardMaster CardMaster1 { get => _cardMaster; set => _cardMaster = value; }
+    public GameObject GameObjectCard2 { get => _gameObject2; set => _gameObject2 = value; }
 }

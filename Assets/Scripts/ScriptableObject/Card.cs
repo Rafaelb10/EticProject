@@ -10,23 +10,4 @@ public class Card
         Data = data;
     }
 
-    public void Use(PlayerStatus target)
-    {
-        switch (Data.CardType1)
-        {
-            case CardData.CardType.Character:
-                if (Data.GameObjectCard != null)
-                    Object.Instantiate(Data.GameObjectCard);
-                break;
-
-            case CardData.CardType.Terrain:
-            case CardData.CardType.Effects:
-                target.Modify(Data.AttributesTerrain, Data.EffectTypeTerrain);
-                break;
-
-            case CardData.CardType.Equipment:
-                target.Modify(Data.AttributesEquipment, CardData.EffectType.Gain);
-                break;
-        }
-    }
 }

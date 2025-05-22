@@ -1,8 +1,10 @@
 using UnityEngine;
 
-public class CameraPLayer : MonoBehaviour
+public class CameraPlayer : MonoBehaviour
 {
     private IInterectable _lastInteracted;
+    private bool _isInteracting = false;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -11,23 +13,26 @@ public class CameraPLayer : MonoBehaviour
     void Update()
     {
 
-
-        IInterectable hitObject = null;
-
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 20))
+        if (_isInteracting == false)
         {
-            hitObject = hit.transform.GetComponent<IInterectable>();
-        }
+            IInterectable hitObject = null;
 
-        if (hitObject != _lastInteracted)
-        {
-            _lastInteracted?.ResetColor();        // Reseta o último
-            hitObject?.PossibleToInterect();      // Aplica cor ao novo
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, 20))
+            {
+                hitObject = hit.transform.GetComponent<IInterectable>();
+            }
 
-            _lastInteracted = hitObject;          // Atualiza referência
+            if (hitObject != _lastInteracted)
+            {
+                _lastInteracted?.ResetColor();
+                hitObject?.PossibleToInterect();
+
+                _lastInteracted = hitObject;
+            }
         }
 
         PlayerInput();
+
     }
 
     private void PlayerInput()
@@ -47,8 +52,14 @@ public class CameraPLayer : MonoBehaviour
 
             if (Iteractable != null)
             {
+                _isInteracting = true;
                 Iteractable.Interect();
             }
         }
+    }
+
+    public void StopInterect()
+    {
+        _isInteracting = false;
     }
 }

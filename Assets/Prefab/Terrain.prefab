@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7744993334489672246}
   - component: {fileID: 1805014467735323204}
   - component: {fileID: -1888816334428680470}
+  - component: {fileID: 3931473277183722958}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -136,3 +137,15 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3931473277183722958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5048987672718372721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8916868740c472f4c9eb9949068336bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

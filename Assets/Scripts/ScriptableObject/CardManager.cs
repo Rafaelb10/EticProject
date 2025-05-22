@@ -15,12 +15,18 @@ public class CardManager : MonoBehaviour
     private const int _terrainInHandLimit = 2;
     private const int _equipamentInHandLimit = 3;
 
+    private Card _insuredCard;
+    private bool _haveCard = false;
+
     [SerializeField] private List<Transform> _characterSlot = new List<Transform>();
     [SerializeField] private List<Transform> _effectSlot = new List<Transform>();
     [SerializeField] private List<Transform> _terraintSlot = new List<Transform>();
     [SerializeField] private List<Transform> _equipamentSlot = new List<Transform>();
 
     private int _buy;
+
+    public Card InsuredCard { get => _insuredCard; set => _insuredCard = value; }
+    public bool HaveCard { get => _haveCard; set => _haveCard = value; }
 
     private void Start()
     {
@@ -137,6 +143,7 @@ public class CardManager : MonoBehaviour
             {
                 GameObject CardView = Instantiate(_effectInHand[i].Data.GameObjectCard, _effectSlot[i]);
                 CardView.GetComponent<CardView>().Setup(_effectInHand[i]);
+                CardView.GetComponent<CardView>().Index = i;
             }
         }
 
@@ -146,6 +153,7 @@ public class CardManager : MonoBehaviour
             {
                 GameObject CardView = Instantiate(_characterInHand[i].Data.GameObjectCard, _characterSlot[i]);
                 CardView.GetComponent<CardView>().Setup(_characterInHand[i]);
+                CardView.GetComponent<CardView>().Index = i;
             }
         }
 
@@ -155,6 +163,7 @@ public class CardManager : MonoBehaviour
             {
                 GameObject CardView = Instantiate(_terrainInHand[i].Data.GameObjectCard, _terraintSlot[i]);
                 CardView.GetComponent<CardView>().Setup(_terrainInHand[i]);
+                CardView.GetComponent<CardView>().Index = i;
             }
         }
 
@@ -164,7 +173,81 @@ public class CardManager : MonoBehaviour
             {
                 GameObject CardView = Instantiate(_equipamentInHand[i].Data.GameObjectCard, _equipamentSlot[i]);
                 CardView.GetComponent<CardView>().Setup(_equipamentInHand[i]);
+                CardView.GetComponent<CardView>().Index = i;
             }
         }
+    }
+
+    public void SelectCard(int index, CardData.CardType cardType)
+    {
+        switch (cardType)
+        {
+            case CardData.CardType.Character:
+                InsuredCard = _characterInHand[index];
+                HaveCard = true;
+                break;
+            case CardData.CardType.Effects:
+                InsuredCard = _effectInHand[index];
+                HaveCard = true;
+                break;
+            case CardData.CardType.Terrain:
+                InsuredCard = _terrainInHand[index];
+                HaveCard = true;
+                break;
+            case CardData.CardType.Equipment:
+                HaveCard = true;
+                InsuredCard = _equipamentInHand[index];
+                break;
+        }
+    }
+
+    public void RemoveCard()
+    {
+        if (InsuredCard != null)
+        {
+            List<Card> listToRemoveFrom = null;
+            List<Transform> slotList = null;
+
+            switch (InsuredCard.Data.CardType1)
+            {
+                case CardData.CardType.Character:
+                    listToRemoveFrom = _characterInHand;
+                    slotList = _characterSlot;
+                    break;
+                case CardData.CardType.Effects:
+                    listToRemoveFrom = _effectInHand;
+                    slotList = _effectSlot;
+                    break;
+                case CardData.CardType.Terrain:
+                    listToRemoveFrom = _terrainInHand;
+                    slotList = _terraintSlot;
+                    break;
+                case CardData.CardType.Equipment:
+                    listToRemoveFrom = _equipamentInHand;
+                    slotList = _equipamentSlot;
+                    break;
+            }
+
+            if (listToRemoveFrom != null && slotList != null)
+            {
+                int index = listToRemoveFrom.IndexOf(InsuredCard);
+                if (index >= 0 && index < slotList.Count)
+                {
+                    if (slotList[index].childCount > 0)
+                    {
+                        Transform child = slotList[index].GetChild(0);
+                        Destroy(child.gameObject);
+                    }
+
+                    listToRemoveFrom.RemoveAt(index);
+                }
+            }
+
+            InsuredCard = null;
+            HaveCard = false;
+        }
+
+        InsuredCard = null;
+        HaveCard = false;
     }
 }
