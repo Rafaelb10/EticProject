@@ -35,7 +35,8 @@ public class Conector : MonoBehaviour, IInterectable
                         GameObject CardView1 = Instantiate(cardManager.InsuredCard.Data.GameObjectCard, _transformSpaw);
                         CardView1.GetComponent<CardView>().Setup(cardManager.InsuredCard);
                         CardView1.GetComponent<CardView>().Used = true;
-                        _spawCard.CreatObject(CardView1.GetComponent<CardView>().CardArtBattle);
+                        _spawCard.ObjectInThisPlace = Instantiate(cardManager.InsuredCard.Data.GameObjectCard2);
+                        _spawCard.HaveObject = true;
 
                         cardManager.RemoveCard();
                         

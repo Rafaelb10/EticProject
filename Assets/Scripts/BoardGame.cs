@@ -10,12 +10,14 @@ public class BoardGame : MonoBehaviour, IInterectable
 
     [SerializeField] private List<BoardGame> _locateToGo = new List<BoardGame>();
     [SerializeField] private List<BoardGame> _lastLocation = new List<BoardGame>();
-
     [SerializeField] private GameObject _objectInThisPlace;
+    [SerializeField] private GameObject _objectSave;
     [SerializeField] private Transform _SpawObject;
-
     [SerializeField] private bool _haveObject;
     [SerializeField] private bool _go;
+
+    public bool HaveObject { get => _haveObject; set => _haveObject = value; }
+    public GameObject ObjectInThisPlace { get => _objectInThisPlace; set => _objectInThisPlace = value; }
 
     void Start()
     {
@@ -34,20 +36,24 @@ public class BoardGame : MonoBehaviour, IInterectable
         if (_go)
         {
             _go = false;
+
+            ObjectInThisPlace = _objectSave;
+            ObjectInThisPlace.transform.position = _SpawObject.transform.position;
+
             foreach (BoardGame place in _lastLocation)
             {
                 place.ResetColor();
                 place.LastLocation(new List<BoardGame>());
                 place.ClearObject();
             }
-            _haveObject = true;
+            HaveObject = true;
 
             LastLocation(new List<BoardGame>());
             cameraPlayer.StopInterect();
             return;
         }
 
-        if (_haveObject)
+        if (HaveObject)
         {
             ResetColor();
             foreach (BoardGame place in _locateToGo)
@@ -55,14 +61,14 @@ public class BoardGame : MonoBehaviour, IInterectable
                 place.ActivateGo();
                 place.PossibleToInterect();
                 place.LastLocation(_locateToGo);
-                place.CreatObject(_objectInThisPlace);
+                place.CreatObject(ObjectInThisPlace);
             }
-            _objectInThisPlace = null;
-            _haveObject = false;
+            ObjectInThisPlace = null;
+            HaveObject = false;
             return;
         }
 
-        if (_haveObject == false)
+        if (HaveObject == false)
         {
             cameraPlayer.StopInterect();
         }
@@ -100,15 +106,12 @@ public class BoardGame : MonoBehaviour, IInterectable
 
     public void CreatObject(GameObject prefabObject)
     {
-        _objectInThisPlace = prefabObject;
-        _objectInThisPlace.transform.position = _SpawObject.transform.position;
-        _haveObject = true;
+        _objectSave = prefabObject;
     }
-
     public void ClearObject()
     {
-        _objectInThisPlace = null;
-        _haveObject = false;
+        _objectSave = null;
     }
+
 
 }
