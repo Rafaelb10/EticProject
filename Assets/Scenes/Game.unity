@@ -550,7 +550,7 @@ GameObject:
   m_Component:
   - component: {fileID: 69009751}
   m_Layer: 0
-  m_Name: BuyLocate
+  m_Name: TurnLocate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3674,7 +3674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &491084717
 Transform:
   m_ObjectHideFlags: 0
@@ -3684,7 +3684,7 @@ Transform:
   m_GameObject: {fileID: 491084716}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 1.008, y: -0.482, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4174,7 +4174,7 @@ Transform:
   m_GameObject: {fileID: 528035363}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.906, z: 0}
+  m_LocalPosition: {x: -0.057, y: 2.121, z: 0}
   m_LocalScale: {x: 0.001, y: 0.001, z: 0.001}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6729,7 +6729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &951031100
 Transform:
   m_ObjectHideFlags: 0
@@ -8085,8 +8085,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1157015832}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 0, y: 1.906, z: 0}
+  m_LocalRotation: {x: 0.27059808, y: -0.6532815, z: 0.27059808, w: 0.6532815}
+  m_LocalPosition: {x: -0.05699998, y: 2.121, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8181,7 +8181,7 @@ MonoBehaviour:
   ReferenceFrame: 0
   RecenterTarget: 0
   PanAxis:
-    Value: 90
+    Value: -90
     Center: 0
     Range: {x: -180, y: 180}
     Wrap: 0
@@ -8191,7 +8191,7 @@ MonoBehaviour:
       Time: 2
     Restrictions: 0
   TiltAxis:
-    Value: 90
+    Value: 45
     Center: 0
     Range: {x: -90, y: 90}
     Wrap: 0
@@ -8465,6 +8465,7 @@ GameObject:
   - component: {fileID: 1178181072}
   - component: {fileID: 1178181071}
   - component: {fileID: 1178181070}
+  - component: {fileID: 1178181073}
   m_Layer: 0
   m_Name: EndTurn
   m_TagString: Untagged
@@ -8561,6 +8562,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178181067}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1178181073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178181067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd113cdb261c834abd0b310f7b331e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionToDo: 1
+  _camPlayer: {fileID: 1575744403}
+  _camTable: {fileID: 491084716}
+  _button: {fileID: 1554972483}
+  _menuTurn: {fileID: 69009750}
 --- !u!1 &1179151444
 GameObject:
   m_ObjectHideFlags: 0
@@ -11011,6 +11029,10 @@ MonoBehaviour:
   - {fileID: 984507054}
   - {fileID: 486359728}
   - {fileID: 1890335504}
+  cardViewPrefabEffect: {fileID: -1487728727954002390, guid: 572a22f21bab4534e810db294869a085, type: 3}
+  cardViewPrefabCharacter: {fileID: -5859910329424823455, guid: 3e6f691959a0c6542ae636a1d7dc5c78, type: 3}
+  cardViewPrefabTerrain: {fileID: 3931473277183722958, guid: 2340c57bf2741024198bae3fa065f9da, type: 3}
+  cardViewPrefabEquipament: {fileID: 1337528993059491900, guid: 64d8dfc3eb716834f8387caf4708f8f1, type: 3}
 --- !u!114 &1508911640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11508,6 +11530,7 @@ GameObject:
   - component: {fileID: 1554972481}
   - component: {fileID: 1554972480}
   - component: {fileID: 1554972479}
+  - component: {fileID: 1554972483}
   m_Layer: 0
   m_Name: FinishTurn
   m_TagString: Untagged
@@ -11605,6 +11628,21 @@ Transform:
   - {fileID: 69009751}
   m_Father: {fileID: 259742125}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1554972483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1554972478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d4c9cb12256ae64ebd473bd7d5a607d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _menuTurn: {fileID: 69009750}
+  _camPlayer: {fileID: 1575744403}
+  _camCombat: {fileID: 491084716}
 --- !u!1 &1557053294
 GameObject:
   m_ObjectHideFlags: 0
@@ -11617,6 +11655,7 @@ GameObject:
   - component: {fileID: 1557053299}
   - component: {fileID: 1557053298}
   - component: {fileID: 1557053297}
+  - component: {fileID: 1557053300}
   m_Layer: 0
   m_Name: CombatTurn
   m_TagString: Untagged
@@ -11713,6 +11752,23 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1557053294}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1557053300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557053294}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fd113cdb261c834abd0b310f7b331e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _actionToDo: 0
+  _camPlayer: {fileID: 1575744403}
+  _camTable: {fileID: 491084716}
+  _button: {fileID: 1554972483}
+  _menuTurn: {fileID: 69009750}
 --- !u!1 &1560727123
 GameObject:
   m_ObjectHideFlags: 0

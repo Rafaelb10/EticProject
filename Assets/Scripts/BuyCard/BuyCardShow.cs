@@ -7,7 +7,7 @@ public class BuyCardShow : MonoBehaviour , IInterectable
 
     [SerializeField] private GameObject _menuBuy;
     [SerializeField] private GameObject _menuGame;
-    private bool _haveOpen;
+    private bool _haveOpen = false;
 
     void Start()
     {

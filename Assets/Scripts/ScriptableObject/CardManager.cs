@@ -5,6 +5,7 @@ using UnityEngine;
 public class CardManager : MonoBehaviour
 {
     [SerializeField] private List<CardData> possibleCards;
+
     private List<Card> _characterInHand = new List<Card>();
     private List<Card> _effectInHand = new List<Card>();
     private List<Card> _terrainInHand = new List<Card>();
@@ -23,6 +24,17 @@ public class CardManager : MonoBehaviour
     [SerializeField] private List<Transform> _terraintSlot = new List<Transform>();
     [SerializeField] private List<Transform> _equipamentSlot = new List<Transform>();
 
+
+    [SerializeField] private CardView cardViewPrefabEffect;
+    [SerializeField] private CardView cardViewPrefabCharacter;
+    [SerializeField] private CardView cardViewPrefabTerrain;
+    [SerializeField] private CardView cardViewPrefabEquipament;
+
+    private PoolManager<CardView> _cardViewPoolEffect;
+    private PoolManager<CardView> _cardViewPoolCharacter;
+    private PoolManager<CardView> _cardViewPoolTerrain;
+    private PoolManager<CardView> _cardViewPoolEquipament;
+
     private int _buy;
 
     public Card InsuredCard { get => _insuredCard; set => _insuredCard = value; }
@@ -30,9 +42,10 @@ public class CardManager : MonoBehaviour
 
     private void Start()
     {
-        BuyCard(1);
-        GenerateCard();
-        PlaceCard();
+        _cardViewPoolEffect = new PoolManager<CardView>(cardViewPrefabEffect, 10);
+        _cardViewPoolCharacter = new PoolManager<CardView>(cardViewPrefabCharacter, 10);
+        _cardViewPoolTerrain = new PoolManager<CardView>(cardViewPrefabTerrain, 10);
+        _cardViewPoolEquipament = new PoolManager<CardView>(cardViewPrefabEquipament, 10);
     }
 
     public void BuyCard(int value)
@@ -42,138 +55,88 @@ public class CardManager : MonoBehaviour
 
     public void GenerateCard()
     {
-        if (possibleCards.Count == 0)
+        if (possibleCards.Count == 0) return;
+
+        List<CardData> filtered = null;
+        List<Card> targetList = null;
+        int limit = 0;
+
+        switch (_buy)
         {
-            return;
-        }
-        else
-        {
-            if (_buy == 0)
-            {
-                List<CardData> effectsCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Effects);
-
-                if (effectsCards.Count == 0)
-                {
-                    return;
-                }
-
-                int index = Random.Range(0, effectsCards.Count);
-                Card newCard = new Card(effectsCards[index]);
-
-                if (_effectInHand.Count >= _effectInHandLimit)
-                {
-                    int removeIndex = Random.Range(0, _effectInHand.Count);
-                    _effectInHand.RemoveAt(removeIndex);
-                }
-
-                _effectInHand.Add(newCard);
-            }
-
-            if (_buy == 1)
-            {
-                List<CardData> characterCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Character);
-
-                if (characterCards.Count == 0)
-                {
-                    return;
-                }
-
-                int index = Random.Range(0, characterCards.Count);
-                Card newCard = new Card(characterCards[index]);
-
-                if (_characterInHand.Count >= _characterInHandLimit)
-                {
-                    int removeIndex = Random.Range(0, _characterInHand.Count);
-                    _characterInHand.RemoveAt(removeIndex);
-                }
-
-                _characterInHand.Add(newCard);
-            }
-
-            if (_buy == 2)
-            {
-                List<CardData> terrainCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Terrain);
-
-                if (terrainCards.Count == 0)
-                {
-                    return;
-                }
-
-                int index = Random.Range(0, terrainCards.Count);
-                Card newCard = new Card(terrainCards[index]);
-
-                if (_terrainInHand.Count >= _terrainInHandLimit)
-                {
-                    int removeIndex = Random.Range(0, _terrainInHand.Count);
-                    _terrainInHand.RemoveAt(removeIndex);
-                }
-
-                _terrainInHand.Add(newCard);
-            }
-
-            if (_buy == 3)
-            {
-                List<CardData> equipamentCards = possibleCards.FindAll(card => card.CardType1 == CardData.CardType.Equipment);
-
-                if (equipamentCards.Count == 0)
-                {
-                    return;
-                }
-
-                int index = Random.Range(0, equipamentCards.Count);
-                Card newCard = new Card(equipamentCards[index]);
-
-                if (_equipamentInHand.Count >= _equipamentInHandLimit)
-                {
-                    int removeIndex = Random.Range(0, _equipamentInHand.Count);
-                    _equipamentInHand.RemoveAt(removeIndex);
-                }
-
-                _equipamentInHand.Add(newCard);
-            }
+            case 0:
+                filtered = possibleCards.FindAll(c => c.CardType1 == CardData.CardType.Effects);
+                targetList = _effectInHand;
+                limit = _effectInHandLimit;
+                break;
+            case 1:
+                filtered = possibleCards.FindAll(c => c.CardType1 == CardData.CardType.Character);
+                targetList = _characterInHand;
+                limit = _characterInHandLimit;
+                break;
+            case 2:
+                filtered = possibleCards.FindAll(c => c.CardType1 == CardData.CardType.Terrain);
+                targetList = _terrainInHand;
+                limit = _terrainInHandLimit;
+                break;
+            case 3:
+                filtered = possibleCards.FindAll(c => c.CardType1 == CardData.CardType.Equipment);
+                targetList = _equipamentInHand;
+                limit = _equipamentInHandLimit;
+                break;
         }
 
+        if (filtered == null || filtered.Count == 0) return;
+
+        int index = Random.Range(0, filtered.Count);
+        Card newCard = new Card(filtered[index]);
+
+        if (targetList.Count >= limit)
+        {
+            targetList.RemoveAt(Random.Range(0, targetList.Count));
+        }
+
+        targetList.Add(newCard);
     }
 
     public void PlaceCard()
     {
-        for (int i = 0; i < _effectInHand.Count && i < _effectSlot.Count; i++)
-        {
-            if (_effectSlot[i].childCount == 0)
-            {
-                GameObject CardView = Instantiate(_effectInHand[i].Data.GameObjectCard, _effectSlot[i]);
-                CardView.GetComponent<CardView>().Setup(_effectInHand[i]);
-                CardView.GetComponent<CardView>().Index = i;
-            }
-        }
+        PlaceCardsInSlots(_effectInHand, _effectSlot);
+        PlaceCardsInSlots(_characterInHand, _characterSlot);
+        PlaceCardsInSlots(_terrainInHand, _terraintSlot);
+        PlaceCardsInSlots(_equipamentInHand, _equipamentSlot);
+    }
 
-        for (int i = 0; i < _characterInHand.Count && i < _characterSlot.Count; i++)
+    private void PlaceCardsInSlots(List<Card> hand, List<Transform> slots)
+    {
+        for (int i = 0; i < hand.Count && i < slots.Count; i++)
         {
-            if (_characterSlot[i].childCount == 0) 
+            if (slots[i].childCount == 0)
             {
-                GameObject CardView = Instantiate(_characterInHand[i].Data.GameObjectCard, _characterSlot[i]);
-                CardView.GetComponent<CardView>().Setup(_characterInHand[i]);
-                CardView.GetComponent<CardView>().Index = i;
-            }
-        }
+                Card card = hand[i];
+                CardView view = null;
 
-        for (int i = 0; i < _terrainInHand.Count && i < _terraintSlot.Count; i++)
-        {
-            if (_terraintSlot[i].childCount == 0)
-            {
-                GameObject CardView = Instantiate(_terrainInHand[i].Data.GameObjectCard, _terraintSlot[i]);
-                CardView.GetComponent<CardView>().Setup(_terrainInHand[i]);
-                CardView.GetComponent<CardView>().Index = i;
-            }
-        }
+                switch (card.Data.CardType1)
+                {
+                    case CardData.CardType.Character:
+                        view = _cardViewPoolCharacter.Get();
+                        break;
+                    case CardData.CardType.Effects:
+                        view = _cardViewPoolEffect.Get();
+                        break;
+                    case CardData.CardType.Terrain:
+                        view = _cardViewPoolTerrain.Get();
+                        break;
+                    case CardData.CardType.Equipment:
+                        view = _cardViewPoolEquipament.Get();
+                        break;
+                }
 
-        for (int i = 0; i < _equipamentInHand.Count && i < _equipamentSlot.Count; i++)
-        {
-            if (_equipamentSlot[i].childCount == 0)
-            {
-                GameObject CardView = Instantiate(_equipamentInHand[i].Data.GameObjectCard, _equipamentSlot[i]);
-                CardView.GetComponent<CardView>().Setup(_equipamentInHand[i]);
-                CardView.GetComponent<CardView>().Index = i;
+                if (view != null)
+                {
+                    view.transform.SetParent(slots[i], false);
+                    view.Setup(card);
+                    view.Index = i;
+                }
             }
         }
     }
@@ -184,67 +147,76 @@ public class CardManager : MonoBehaviour
         {
             case CardData.CardType.Character:
                 InsuredCard = _characterInHand[index];
-                HaveCard = true;
                 break;
             case CardData.CardType.Effects:
                 InsuredCard = _effectInHand[index];
-                HaveCard = true;
                 break;
             case CardData.CardType.Terrain:
                 InsuredCard = _terrainInHand[index];
-                HaveCard = true;
                 break;
             case CardData.CardType.Equipment:
-                HaveCard = true;
                 InsuredCard = _equipamentInHand[index];
                 break;
         }
+
+        HaveCard = true;
     }
 
     public void RemoveCard()
     {
-        if (InsuredCard != null)
+        if (InsuredCard == null) return;
+
+        List<Card> targetList = null;
+        List<Transform> slotList = null;
+
+        switch (InsuredCard.Data.CardType1)
         {
-            List<Card> listToRemoveFrom = null;
-            List<Transform> slotList = null;
+            case CardData.CardType.Character:
+                targetList = _characterInHand;
+                slotList = _characterSlot;
+                break;
+            case CardData.CardType.Effects:
+                targetList = _effectInHand;
+                slotList = _effectSlot;
+                break;
+            case CardData.CardType.Terrain:
+                targetList = _terrainInHand;
+                slotList = _terraintSlot;
+                break;
+            case CardData.CardType.Equipment:
+                targetList = _equipamentInHand;
+                slotList = _equipamentSlot;
+                break;
+        }
 
-            switch (InsuredCard.Data.CardType1)
+        if (targetList != null && slotList != null)
+        {
+            int index = targetList.IndexOf(InsuredCard);
+            if (index >= 0 && index < slotList.Count && slotList[index].childCount > 0)
             {
-                case CardData.CardType.Character:
-                    listToRemoveFrom = _characterInHand;
-                    slotList = _characterSlot;
-                    break;
-                case CardData.CardType.Effects:
-                    listToRemoveFrom = _effectInHand;
-                    slotList = _effectSlot;
-                    break;
-                case CardData.CardType.Terrain:
-                    listToRemoveFrom = _terrainInHand;
-                    slotList = _terraintSlot;
-                    break;
-                case CardData.CardType.Equipment:
-                    listToRemoveFrom = _equipamentInHand;
-                    slotList = _equipamentSlot;
-                    break;
-            }
-
-            if (listToRemoveFrom != null && slotList != null)
-            {
-                int index = listToRemoveFrom.IndexOf(InsuredCard);
-                if (index >= 0 && index < slotList.Count)
+                Transform child = slotList[index].GetChild(0);
+                CardView view = child.GetComponent<CardView>();
+                if (view != null)
                 {
-                    if (slotList[index].childCount > 0)
+                    switch (InsuredCard.Data.CardType1)
                     {
-                        Transform child = slotList[index].GetChild(0);
-                        Destroy(child.gameObject);
+                        case CardData.CardType.Character:
+                            _cardViewPoolCharacter.ReturnToPool(view);
+                            break;
+                        case CardData.CardType.Effects:
+                            _cardViewPoolEffect.ReturnToPool(view);
+                            break;
+                        case CardData.CardType.Terrain:
+                            _cardViewPoolTerrain.ReturnToPool(view);
+                            break;
+                        case CardData.CardType.Equipment:
+                            _cardViewPoolEquipament.ReturnToPool(view);
+                            break;
                     }
-
-                    listToRemoveFrom.RemoveAt(index);
                 }
             }
 
-            InsuredCard = null;
-            HaveCard = false;
+            targetList.RemoveAt(index);
         }
 
         InsuredCard = null;
