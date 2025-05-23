@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _cardType: 3
   _sprite: {fileID: 0}
-  _gameObject: {fileID: 0}
+  _gameObject: {fileID: 24329386159866142, guid: 64d8dfc3eb716834f8387caf4708f8f1, type: 3}
+  _gameObject2: {fileID: 377273430620397666, guid: 08531d58985400b4c963d0488e581912, type: 3}
   _cost: 0
   _name: 
   _description: 

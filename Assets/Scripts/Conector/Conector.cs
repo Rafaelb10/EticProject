@@ -7,6 +7,7 @@ public class Conector : MonoBehaviour, IInterectable
 {
     private Material _materialInstance;
     private Color _originalColor;
+
     [SerializeField] private Transform _transformSpaw;
     [SerializeField] private BoardGame _spawCard;
 

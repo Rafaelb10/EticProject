@@ -1,18 +1,23 @@
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour, IInterectable
+public class CombatButton : MonoBehaviour, IInterectable
 {
     private Material _materialInstance;
     private Color _originalColor;
 
-    [SerializeField] private int _actionToDo = 0;
-    [SerializeField] private GameObject _camPlayer;
-    [SerializeField] private GameObject _camTable;
-    [SerializeField] private CombatButton _button;
     [SerializeField] private GameObject _menuTurn;
+    [SerializeField] private GameObject _camPlayer;
+    [SerializeField] private GameObject _camCombat;
+
+    private bool _haveOpen;
+    private bool _turnCombatON;
+
+    public bool TurnCombatON { get => _turnCombatON; set => _turnCombatON = value; }
+    public bool HaveOpen { get => _haveOpen; set => _haveOpen = value; }
 
     void Start()
     {
+        _menuTurn.SetActive(false);
         Renderer renderer = GetComponent<Renderer>();
         if (renderer != null)
         {
@@ -24,23 +29,26 @@ public class CombatManager : MonoBehaviour, IInterectable
     public void Interect()
     {
         CameraPlayer cameraPlayer = FindAnyObjectByType<CameraPlayer>();
-        if (_actionToDo == 0)
+        if (HaveOpen == false)
         {
-            _camPlayer.SetActive(false);
-            _camTable.SetActive(true);
-            _button.TurnCombatON = true;
-            
-            _menuTurn.SetActive(false);
-        }
-        else if (_actionToDo == 1)
-        {
-            _button.HaveOpen = false;
-            _menuTurn.SetActive(false);
-            ResetColor();
+            HaveOpen = true;
+            _menuTurn.SetActive(true);
             cameraPlayer.StopInterect();
+            ResetColor();
             return;
         }
+
+        if (TurnCombatON)
+        {
+            _camPlayer.SetActive(true);
+            _camCombat.SetActive(false);
+            cameraPlayer.StopInterect();
+            ResetColor();
+        }
+
         ResetColor();
+        _menuTurn.SetActive(false);
+        HaveOpen = false;
         cameraPlayer.StopInterect();
     }
 

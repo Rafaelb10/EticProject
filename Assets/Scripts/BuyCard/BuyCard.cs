@@ -1,15 +1,12 @@
 using UnityEngine;
 
-public class CombatManager : MonoBehaviour, IInterectable
+public class BuyCard : MonoBehaviour, IInterectable
 {
     private Material _materialInstance;
     private Color _originalColor;
 
-    [SerializeField] private int _actionToDo = 0;
-    [SerializeField] private GameObject _camPlayer;
-    [SerializeField] private GameObject _camTable;
-    [SerializeField] private CombatButton _button;
-    [SerializeField] private GameObject _menuTurn;
+    [SerializeField] private int _cardIndexToBuy = 0;
+    [SerializeField] private CardBuyManager _cardBuyManager;
 
     void Start()
     {
@@ -24,21 +21,21 @@ public class CombatManager : MonoBehaviour, IInterectable
     public void Interect()
     {
         CameraPlayer cameraPlayer = FindAnyObjectByType<CameraPlayer>();
-        if (_actionToDo == 0)
+        if (_cardIndexToBuy == 0)
         {
-            _camPlayer.SetActive(false);
-            _camTable.SetActive(true);
-            _button.TurnCombatON = true;
-            
-            _menuTurn.SetActive(false);
+            _cardBuyManager.BuyEffect();
         }
-        else if (_actionToDo == 1)
+        else if (_cardIndexToBuy == 1)
         {
-            _button.HaveOpen = false;
-            _menuTurn.SetActive(false);
-            ResetColor();
-            cameraPlayer.StopInterect();
-            return;
+            _cardBuyManager.BuyCharacter();
+        }
+        else if (_cardIndexToBuy == 2)
+        {
+            _cardBuyManager.BuyTerrain();
+        }
+        else if (_cardIndexToBuy == 3)
+        {
+            _cardBuyManager.BuyEquipment();
         }
         ResetColor();
         cameraPlayer.StopInterect();
