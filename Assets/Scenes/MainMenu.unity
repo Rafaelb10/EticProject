@@ -2418,6 +2418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 659ec236d3fab394c8408d28d829aaa6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  click: {fileID: -8109757888590975749, guid: 1d5bbca807a96ae4494c86b0ed2ab16f, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

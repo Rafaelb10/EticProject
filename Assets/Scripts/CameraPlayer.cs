@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class CameraPlayer : MonoBehaviour
 {
     private IInterectable _lastInteracted;
     private bool _isInteracting = false;
+
+    [SerializeField] private InputActionReference click;
 
     void Start()
     {
@@ -33,6 +36,29 @@ public class CameraPlayer : MonoBehaviour
 
         PlayerInput();
 
+    }
+
+    private void OnEnable()
+    {
+        if (click != null)
+        {
+            click.action.performed += OnClick;
+            click.action.Enable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (click != null)
+        {
+            click.action.performed -= OnClick;
+            click.action.Disable();
+        }
+    }
+
+    private void OnClick(InputAction.CallbackContext context)
+    {
+        Interact();
     }
 
     private void PlayerInput()
