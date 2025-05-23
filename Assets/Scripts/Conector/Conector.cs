@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using static CardData;
 
@@ -35,7 +36,8 @@ public class Conector : MonoBehaviour, IInterectable
                         GameObject CardView1 = Instantiate(cardManager.InsuredCard.Data.GameObjectCard, _transformSpaw);
                         CardView1.GetComponent<CardView>().Setup(cardManager.InsuredCard);
                         CardView1.GetComponent<CardView>().Used = true;
-                        _spawCard.ObjectInThisPlace = Instantiate(cardManager.InsuredCard.Data.GameObjectCard2);
+                        _spawCard.ObjectInThisPlace = Instantiate(cardManager.InsuredCard.Data.GameObjectCard2, _spawCard.SpawObject);
+                        CardView1.GetComponent<CardView>().CardArtBattle = _spawCard.ObjectInThisPlace;
                         _spawCard.HaveObject = true;
 
                         cardManager.RemoveCard();

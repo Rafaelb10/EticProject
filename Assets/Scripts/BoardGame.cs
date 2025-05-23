@@ -18,6 +18,7 @@ public class BoardGame : MonoBehaviour, IInterectable
 
     public bool HaveObject { get => _haveObject; set => _haveObject = value; }
     public GameObject ObjectInThisPlace { get => _objectInThisPlace; set => _objectInThisPlace = value; }
+    public Transform SpawObject { get => _SpawObject; set => _SpawObject = value; }
 
     void Start()
     {
@@ -38,7 +39,7 @@ public class BoardGame : MonoBehaviour, IInterectable
             _go = false;
 
             ObjectInThisPlace = _objectSave;
-            ObjectInThisPlace.transform.position = _SpawObject.transform.position;
+            ObjectInThisPlace.transform.position = SpawObject.transform.position;
 
             foreach (BoardGame place in _lastLocation)
             {
