@@ -41,11 +41,11 @@ public class BoardGame : MonoBehaviour, IInterectable
             ObjectInThisPlace = _objectSave;
             ObjectInThisPlace.transform.position = SpawObject.transform.position;
 
-            foreach (BoardGame place in _lastLocation)
+            for (int i = 0; i < _lastLocation.Count; i++)
             {
-                place.ResetColor();
-                place.LastLocation(new List<BoardGame>());
-                place.ClearObject();
+                _lastLocation[i].ResetColor();
+                _lastLocation[i].LastLocation(new List<BoardGame>());
+                _lastLocation[i].ClearObject();
             }
             HaveObject = true;
 
@@ -57,13 +57,14 @@ public class BoardGame : MonoBehaviour, IInterectable
         if (HaveObject)
         {
             ResetColor();
-            foreach (BoardGame place in _locateToGo)
+            for (int i = 0; i < _locateToGo.Count; i++)
             {
-                place.ActivateGo();
-                place.PossibleToInterect();
-                place.LastLocation(_locateToGo);
-                place.CreatObject(ObjectInThisPlace);
+                _locateToGo[i].ActivateGo();
+                _locateToGo[i].PossibleToInterect();
+                _locateToGo[i].LastLocation(_locateToGo);
+                _locateToGo[i].CreatObject(ObjectInThisPlace);
             }
+
             ObjectInThisPlace = null;
             HaveObject = false;
             return;
