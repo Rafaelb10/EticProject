@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PoolManager<gameObjectToSave> where gameObjectToSave : Component
 {
-    private readonly gameObjectToSave prefab;
-    private readonly Queue<gameObjectToSave> pool = new Queue<gameObjectToSave>();
+    private gameObjectToSave prefab;
+    private Queue<gameObjectToSave> pool = new Queue<gameObjectToSave>();
 
     public PoolManager(gameObjectToSave prefab, int initialSize)
     {
